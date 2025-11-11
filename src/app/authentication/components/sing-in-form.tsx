@@ -24,7 +24,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
+import { Header } from "@/components/common/header";
 // aqui devemos criar o schema do formulário de login.
 const formSchema = z.object({
   email: z.email("Email inválido"),
@@ -72,7 +72,7 @@ const singInForm = () => {
 
   return (
     <>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Entrar</CardTitle>
           <CardDescription>Faça login para acessar o sistema.</CardDescription>

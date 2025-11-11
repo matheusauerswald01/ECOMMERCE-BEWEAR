@@ -24,7 +24,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+import { Header } from "@/components/common/header";
 const formSchema = z
   .object({
     name: z.string().trim().min(1, "Nome é obrigatório"),
@@ -74,7 +74,7 @@ const singUpForm = () => {
 
   return (
     <>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Criar Conta</CardTitle>
           <CardDescription>
