@@ -21,6 +21,9 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // aqui devemos criar o schema do formulário de login.
 const formSchema = z.object({
@@ -31,6 +34,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const singInForm = () => {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,9 +43,31 @@ const singInForm = () => {
     },
   });
 
-  function onSubmit(values: FormValues) {
-    console.log("formulario enviado com sucesso");
-    console.log(values);
+  async function onSubmit(values: FormValues) {
+    await authClient.signIn.email({
+      email: values.email,
+      password: values.password,
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: (error) => {
+          if (error.error.code === "USER_NOT_FOUND") {
+            toast.error("Usuário não encontrado.");
+            return form.setError("email", {
+              message: "Usuário não encontrado.",
+            });
+          }
+          if (error.error.code === "INVALID_EMAIL_OR_PASSWORD") {
+            toast.error("Email ou senha inválidos.");
+            return form.setError("email", {
+              message: "Email ou senha inválidos.",
+            });
+          }
+          toast.error(error.error.message);
+        },
+      },
+    });
   }
 
   return (
