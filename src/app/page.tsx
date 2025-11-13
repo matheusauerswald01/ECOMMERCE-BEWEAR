@@ -1,29 +1,43 @@
 import { Header } from "@/components/common/header";
+import { db } from "@/db";
 import Image from "next/image";
+import ProductList from "@/components/common/product-list";
 
-export default function Home() {
+export default async function Home() {
+  const products = await db.query.productTable.findMany({
+    with: {
+      variants: true,
+    },
+  });
+  console.log(products);
   return (
     <>
       <Header />
 
-      <div className="space-y-6 px-5">
-        <Image
-          src="/banner-01.png"
-          alt="Leve uma vida com estilo"
-          height={0}
-          width={0}
-          sizes="100vw"
-          className="h-auto w-full"
-        />
+      <div className="space-y-6">
+        <div className="px-5">
+          <Image
+            src="/banner-01.png"
+            alt="Leve uma vida com estilo"
+            height={0}
+            width={0}
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </div>
 
-        <Image
-          src="/banner-02.png"
-          alt="Seja Autentico"
-          height={0}
-          width={0}
-          sizes="100vw"
-          className="h-auto w-full"
-        />
+        <ProductList title="Mais Vendidos" products={products} />
+
+        <div className="px-5">
+          <Image
+            src="/banner-02.png"
+            alt="Seja Autentico"
+            height={0}
+            width={0}
+            sizes="100vw"
+            className="h-auto w-full"
+          />
+        </div>
       </div>
     </>
   );
