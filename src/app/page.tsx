@@ -21,7 +21,6 @@ export default async function Home() {
       variants: true,
     },
   });
-  console.log(products);
   return (
     <>
       <Header />
